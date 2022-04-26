@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import planetsContext from '../context/planetsContext';
 
 function Filter() {
@@ -26,6 +26,7 @@ function Filter() {
 
   const handleClick = () => {
     const { column, comparison, value } = filterByNumericValues;
+    setSelectedColum(selectedColum.filter((options) => column !== options)); // retorna todas as opoçoes diferente das que escolhi
     switch (comparison) {
     case 'maior que':
       return setData(data.filter((planetas) => +planetas[column] > +value));
@@ -36,7 +37,14 @@ function Filter() {
     default: return data;
     }
   };
-
+  useEffect(() => {
+    const updateColumn = () => {
+      setFilterByNumericValues({ column: selectedColum[0],
+        comparison: 'maior que',
+        value: 0 });
+    };
+    updateColumn();
+  }, [selectedColum]);
   return (
     <form>
       <input
